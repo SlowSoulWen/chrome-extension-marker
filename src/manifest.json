@@ -1,0 +1,52 @@
+{
+  "browser_action": {
+    "default_popup": "./popup.html"
+  },
+  "content_scripts": [
+    {
+      "all_frames": false,
+      "js": [
+        "./js/chunk-common.js",
+        "./js/chunk-vendors.js",
+        "./contentScripts.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "icons": {
+    "16": "assets/logo.png",
+    "32": "assets/logo.png",
+    "64": "assets/logo.png",
+    "128": "assets/logo.png"
+  },
+  "manifest_version": 2,
+  "options_ui": {
+    "chrome_style": false,
+    "page": "./options.html"
+  },
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "notifications",
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "version": "1.0.0",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "background": {
+    "scripts": [
+      "./js/chunk-common.js",
+      "./js/chunk-vendors.js",
+      "./background.js"
+    ]
+  },
+  "description": "a chrome extension",
+  "name": "chrome-extension-marker"
+}
