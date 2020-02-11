@@ -3,7 +3,11 @@
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your popup"/>
     <transition name="slide-fade">
-      <Tip v-show="showTip" />
+      <Tip v-show="showTip">
+        <div>
+          <HightLightItem class="tip-item" />
+        </div>
+      </Tip>
     </transition>
     <button @click="handleBtnClick">显示Tip</button>
   </div>
@@ -12,6 +16,7 @@
 <script>
 import HelloWorld from '@/components/HelloWorld.vue';
 import Tip from '@/components/Tip.vue';
+import HightLightItem from '@/components/HightLightItem.vue';
 
 export default {
   name: 'app',
@@ -32,7 +37,8 @@ export default {
   },
   components: {
     HelloWorld,
-    Tip
+    Tip,
+    HightLightItem
   }
 }
 </script>
@@ -53,8 +59,7 @@ export default {
   .slide-fade-leave-active {
     transition: all .15s ease-in;
   }
-  .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active for below version 2.1.8 */ {
+  .slide-fade-enter, .slide-fade-leave-to {
     transform: translateY(10px);
     opacity: 0;
   }

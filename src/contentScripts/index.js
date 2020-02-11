@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import Highlighter from 'web-highlighter';
 import App from './App.vue';
 import './index.less';
 import '../assets/iconfont';
@@ -13,7 +14,10 @@ initTipWarp();
 
 Vue.use({
     install(Vue) {
-        Vue.prototype.chrome = chrome; // eslint-disable-line
+        Vue.prototype.$chrome = chrome; // eslint-disable-line
+        Vue.prototype.$highlighter = new Highlighter({
+            $root: window.document.body || window.document.documentElement,
+        });
     }
 })
 
