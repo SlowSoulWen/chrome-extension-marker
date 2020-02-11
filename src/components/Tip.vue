@@ -1,6 +1,7 @@
 <template>
     <div class="default-tip-style">
-        <svg class="icon" aria-hidden="true">
+        <slot></slot>
+        <!-- <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-hf_makebi_fill"></use>
         </svg>
         <svg class="icon" aria-hidden="true">
@@ -8,7 +9,7 @@
         </svg>
         <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-lajitong"></use>
-        </svg>
+        </svg> -->
     </div>
 </template>
 
@@ -20,10 +21,8 @@ export default {
 
 <style lang="less" scoped>
     .default-tip-style {
-        padding: 0 12px;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 0 12px;
         box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px;
         box-sizing: border-box;
         position: absolute;
@@ -41,16 +40,4 @@ export default {
             }
         }
     }
-
-// .default-tip-style::after {
-//     content: '';
-//     position: absolute;
-//     left: 16px;
-//     bottom: -4px;
-//     border-color: #444 transparent transparent;
-//     border-width: 4px 4px 0;
-//     border-style: solid;
-//     height: 0;
-//     width: 0;
-// }
 </style>
