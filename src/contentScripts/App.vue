@@ -4,8 +4,10 @@
             <div class="tip_warp" v-show="showTip" ref="tip">
                 <Tip id="_marker_tip">
                     <div class="item-warp">
-                        <HightLightItem class="tip-item" />
-                        <DeleteItem v-show="showDelete" class="tip-item" :id="highLightId" />
+                        <HightLightItem v-if="!isEditMode" :color="currentColor" class="tip-item" />
+                        <NoteItem :color="currentColor" class="tip-item" />
+                        <DeleteItem v-if="isEditMode" class="tip-item" :id="highLightId" />
+                        <ColorSelectorItem v-if="!isEditMode" v-model="currentColor" :colors="colors" class="tip-item" />
                     </div>
                 </Tip>
             </div>
@@ -18,7 +20,23 @@ import Highlighter from 'web-highlighter';
 import Tip from '@/components/Tip.vue';
 import HightLightItem from '@/components/HightLightItem.vue';
 import DeleteItem from '@/components/DeleteItem.vue';
+import NoteItem from '@/components/NoteItem.vue';
+import ColorSelectorItem from '@/components/ColorSelectorItem.vue';
 import { getPosition } from '@/utils';
+
+const COLORS = [{
+    color: '#FFFF99',
+    activeColor: '#FFFF99',
+    name: 'yellow',
+}, {
+    color: '#00FFCC',
+    activeColor: '#00FFCC',
+    name: 'green',
+}, {
+    color: '#FFCCCC',
+    activeColor: '#FFCCCC',
+    name: 'pink',
+}];
 
 export default {
     name: 'marker_app',
@@ -28,6 +46,9 @@ export default {
             showDelete: false,
             mousePosition: null,
             highLightId: null, // 当前选中的高亮备注id
+            isEditMode: false, // 当前处于选中高亮区的编辑模式
+            colors: COLORS,
+            currentColor: COLORS[0], // 当前选择的高亮颜色
         }
     },
     mounted() {
@@ -39,9 +60,9 @@ export default {
         initHighLightEvent() {
             this.$highlighter.on(Highlighter.event.CLICK, (data, inst, e) => {
                 const { id } = data;
-                console.log('Highlighter.event.CLICK');
                 e.stopPropagation();
                 this.highLightId = id;
+                this.isEditMode = true;
                 const $dom = this.$highlighter.getDoms(id)[0];
                 if ($dom) {
                     const { top, left } = getPosition($dom);
@@ -54,6 +75,7 @@ export default {
             });
         },
         handleDocClick() {
+            console.log('handleDocClick');
             const selection = window.getSelection();
             if (!selection.isCollapsed) {
                 const { top, left } = this.mousePosition;
@@ -87,7 +109,7 @@ export default {
         showTip(isTipShow) {
             if (!isTipShow) {
                 setTimeout(() => {
-                    this.showDelete = false;
+                    this.isEditMode = false;
                 }, 300)
             }
         }
@@ -96,6 +118,8 @@ export default {
         Tip,
         HightLightItem,
         DeleteItem,
+        NoteItem,
+        ColorSelectorItem,
     }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
-    <div class="hight-light-item">
-        <button class="hight-light-btn" @click="handleHightLight()">
+    <div class="note-item">
+        <button @click="handleNote()" class="note-btn">
             <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-hf_makebi_fill"></use>
+                <use xlink:href="#icon-bi"></use>
             </svg>
         </button>
     </div>
@@ -10,14 +10,14 @@
 
 <script>
 export default {
-    name: 'hight-light-item',
+    name: 'note-item',
     props: {
         color: {
             type: Object,
         }
     },
     methods: {
-        handleHightLight() {
+        handleNote() {
             const { name } = this.color;
             const selection = window.getSelection();
             if (selection.isCollapsed) {
@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .hight-light-item {
+    .note-item {
         .icon {
             color: #fff;
             font-size: 18px;

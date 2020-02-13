@@ -5,3 +5,25 @@
     fill: currentColor;
     overflow: hidden;
 }
+
+.slide-fade-enter-active {
+    transition: all .2s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all .15s ease-in;
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to {
+    transform: translateY(10px);
+    opacity: 0;
+}
+
+button {
+    cursor: pointer;
+    background: initial;
+    padding: 0;
+    outline: none;
+    border-style: none;
+}

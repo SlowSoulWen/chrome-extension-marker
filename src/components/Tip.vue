@@ -1,15 +1,6 @@
 <template>
     <div class="default-tip-style">
         <slot></slot>
-        <!-- <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-hf_makebi_fill"></use>
-        </svg>
-        <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-bi"></use>
-        </svg>
-        <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-lajitong"></use>
-        </svg> -->
     </div>
 </template>
 
