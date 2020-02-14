@@ -28,8 +28,9 @@ export default {
                     className: `highlight-style-${name}`
                 }
             })
-            this.$highlighter.fromRange(selection.getRangeAt(0));
+            const source = this.$highlighter.fromRange(selection.getRangeAt(0));
             window.getSelection().removeAllRanges();
+            this.$emit('edit', source);
         }
     }
 }

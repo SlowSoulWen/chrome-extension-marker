@@ -5,11 +5,16 @@
                 <Tip id="_marker_tip">
                     <div class="item-warp">
                         <HightLightItem v-if="!isEditMode" :color="currentColor" class="tip-item" />
-                        <NoteItem :color="currentColor" class="tip-item" />
+                        <NoteItem :color="currentColor" @edit="hanleEdit" class="tip-item" />
                         <DeleteItem v-if="isEditMode" class="tip-item" :id="highLightId" />
                         <ColorSelectorItem v-if="!isEditMode" v-model="currentColor" :colors="colors" class="tip-item" />
                     </div>
                 </Tip>
+            </div>
+        </transition>
+        <transition name="slide-fade">
+            <div class="editor_warp" v-show="showEditor" ref="editor">
+                <Editor v-if="showEditor" />
             </div>
         </transition>
   </div>
@@ -22,6 +27,7 @@ import HightLightItem from '@/components/HightLightItem.vue';
 import DeleteItem from '@/components/DeleteItem.vue';
 import NoteItem from '@/components/NoteItem.vue';
 import ColorSelectorItem from '@/components/ColorSelectorItem.vue';
+import Editor from '@/components/Editor.vue';
 import { getPosition } from '@/utils';
 
 const COLORS = [{
@@ -43,7 +49,7 @@ export default {
     data() {
         return {
             showTip: false,
-            showDelete: false,
+            showEditor: false,
             mousePosition: null,
             highLightId: null, // 当前选中的高亮备注id
             isEditMode: false, // 当前处于选中高亮区的编辑模式
@@ -59,8 +65,9 @@ export default {
     methods: {
         initHighLightEvent() {
             this.$highlighter.on(Highlighter.event.CLICK, (data, inst, e) => {
-                const { id } = data;
                 e.stopPropagation();
+                if (this.showEditor) return;
+                const { id } = data;
                 this.highLightId = id;
                 this.isEditMode = true;
                 const $dom = this.$highlighter.getDoms(id)[0];
@@ -70,14 +77,12 @@ export default {
                         top: top - 50,
                         left,
                     });
-                    this.showDelete = true;
                 }
             });
         },
         handleDocClick() {
-            console.log('handleDocClick');
             const selection = window.getSelection();
-            if (!selection.isCollapsed) {
+            if (!selection.isCollapsed && !this.showEditor) {
                 const { top, left } = this.mousePosition;
                 this.setTipPosition({
                     top: top - 50,
@@ -103,6 +108,24 @@ export default {
             this.$refs.tip.style.top = `${top}px`;
             this.$refs.tip.style.left = `${left}px`;
             this.showTip = true;
+        },
+        setEditorPosition(position) {
+            const { top, left } = position;
+            this.$refs.editor.style.top = `${top}px`;
+            this.$refs.editor.style.left = `${left}px`;
+            this.showEditor = true;
+            this.showTip = false;
+        },
+        hanleEdit(source) {
+            const { id } = source;
+            const $dom = this.$highlighter.getDoms(id)[0];
+            if ($dom) {
+                const { top, left } = getPosition($dom);
+                this.setEditorPosition({
+                    top: top - 110,
+                    left,
+                });
+            }
         }
     },
     watch: {
@@ -120,13 +143,15 @@ export default {
         DeleteItem,
         NoteItem,
         ColorSelectorItem,
+        Editor,
     }
 }
 </script>
 
 <style lang="less" scoped>
     #_marker_app {
-        .tip_warp {
+        .tip_warp,
+        .editor_warp {
             z-index: 9999;
             position: absolute;
         }
