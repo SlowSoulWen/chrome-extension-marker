@@ -17,6 +17,7 @@ export default {
         handleDelete() {
             if (!this.id) return;
             this.$highlighter.remove(this.id);
+            this.$emit('delete', this.id);
         }
     }
 }

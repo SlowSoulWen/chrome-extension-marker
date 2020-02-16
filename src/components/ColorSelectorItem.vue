@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import { createStyleSheet } from '@/utils';
-
 export default {
     name: 'color-selector',
     model: {
@@ -31,15 +29,7 @@ export default {
             showColorSelect: false,
         }
     },
-    mounted() {
-        this.initStyleSheet();
-    },
     methods: {
-        initStyleSheet() {
-            this.colors.forEach(color => {
-                createStyleSheet(color);
-            });
-        },
         handleSelect() {
             this.showColorSelect = true;
         },

@@ -1,23 +1,23 @@
 <template>
-  <div id="_marker_app">
-        <transition name="slide-fade">
-            <div class="tip_warp" v-show="showTip" ref="tip">
-                <Tip id="_marker_tip">
-                    <div class="item-warp">
-                        <HightLightItem v-if="!isEditMode" :color="currentColor" class="tip-item" />
-                        <NoteItem :color="currentColor" @edit="hanleEdit" class="tip-item" />
-                        <DeleteItem v-if="isEditMode" class="tip-item" :id="highLightId" />
-                        <ColorSelectorItem v-if="!isEditMode" v-model="currentColor" :colors="colors" class="tip-item" />
-                    </div>
-                </Tip>
-            </div>
-        </transition>
-        <transition name="slide-fade">
-            <div class="editor_warp" v-show="showEditor" ref="editor">
-                <Editor v-if="showEditor" />
-            </div>
-        </transition>
-  </div>
+    <div id="_marker_app">
+            <transition name="slide-fade">
+                <div class="tip_warp" v-show="showTip" ref="tip">
+                    <Tip id="_marker_tip">
+                        <div class="item-warp">
+                            <HightLightItem v-if="!isEditMode" :color="currentColor" class="tip-item" />
+                            <NoteItem :color="currentColor" :id="this.highLightId" @edit="handleEdit" class="tip-item" />
+                            <DeleteItem v-if="isEditMode" class="tip-item" :id="this.highLightId" @delete="handleDelete" />
+                            <ColorSelectorItem v-if="!isEditMode" v-model="currentColor" :colors="colors" class="tip-item" />
+                        </div>
+                    </Tip>
+                </div>
+            </transition>
+            <transition name="slide-fade">
+                <div class="editor_warp" v-show="showEditor" ref="editor">
+                    <Editor :defaultNote="defaultNote" :id="this.highLightId" @note="handleSubmitNote" @cancel="handleCancelNote()" @delete="handleDelete" v-if="showEditor" />
+                </div>
+            </transition>
+    </div>
 </template>
 
 <script>
@@ -28,7 +28,7 @@ import DeleteItem from '@/components/DeleteItem.vue';
 import NoteItem from '@/components/NoteItem.vue';
 import ColorSelectorItem from '@/components/ColorSelectorItem.vue';
 import Editor from '@/components/Editor.vue';
-import { getPosition } from '@/utils';
+import { getPosition, createStyleSheet } from '@/utils';
 
 const COLORS = [{
     color: '#FFFF99',
@@ -55,29 +55,74 @@ export default {
             isEditMode: false, // 当前处于选中高亮区的编辑模式
             colors: COLORS,
             currentColor: COLORS[0], // 当前选择的高亮颜色
+            defaultNote: '',
         }
     },
     mounted() {
         window.document.addEventListener('click', this.handleDocClick);
         window.document.addEventListener('mousemove', this.handleMouseMove);
+        this.initStyleSheet();
+        this.initHighLightFromStroage();
         this.initHighLightEvent();
     },
     methods: {
+        initStyleSheet() {
+            this.colors.forEach(color => {
+                createStyleSheet(color);
+            });
+        },
+        initHighLightFromStroage() {
+            const allHighLights = this.$storage.local.get();
+            Object.keys(allHighLights).forEach(key => {
+                const { sources, bgColor: { name } } = allHighLights[key];
+                sources.forEach(source => {
+                    const { startMeta, endMeta, text, id } = source;
+                    this.$highlighter.setOption({
+                        style: {
+                            className: `highlight-style-${name}`
+                        }
+                    })
+                    this.$highlighter.fromStore(startMeta, endMeta, text, id);
+                })
+            })
+        },
         initHighLightEvent() {
             this.$highlighter.on(Highlighter.event.CLICK, (data, inst, e) => {
                 e.stopPropagation();
-                if (this.showEditor) return;
+                this.defaultNote = '';
+                if (this.showEditor) {
+                    this.showEditor = false;
+                    return;
+                }
                 const { id } = data;
                 this.highLightId = id;
-                this.isEditMode = true;
-                const $dom = this.$highlighter.getDoms(id)[0];
-                if ($dom) {
-                    const { top, left } = getPosition($dom);
-                    this.setTipPosition({
-                        top: top - 50,
-                        left,
-                    });
+                const { note } = this.$storage.local.get(id);
+                if (note) {
+                    // 已经有备注
+                    this.defaultNote = note;
+                    this.handleEdit(data);
+                } else {
+                    this.isEditMode = true;
+                    const $dom = this.$highlighter.getDoms(id)[0];
+                    if ($dom) {
+                        const { top, left } = getPosition($dom);
+                        this.setTipPosition({
+                            top: top - 50,
+                            left,
+                        });
+                    }
                 }
+            });
+            this.$highlighter.on(Highlighter.event.CREATE, async ({ sources, type }) => {
+                const source = sources[0]
+                const { id } = source;
+                await this.$storage.local.set({
+                    [id]: {
+                        sources,
+                        type,
+                        bgColor: this.currentColor
+                    }
+                });
             });
         },
         handleDocClick() {
@@ -90,6 +135,8 @@ export default {
                 });
             } else {
                 this.showTip = false;
+                this.defaultNote = '';
+                this.showEditor = false;
             }
         },
         handleMouseMove(e) {
@@ -116,16 +163,41 @@ export default {
             this.showEditor = true;
             this.showTip = false;
         },
-        hanleEdit(source) {
+        handleEdit(source) {
             const { id } = source;
             const $dom = this.$highlighter.getDoms(id)[0];
             if ($dom) {
                 const { top, left } = getPosition($dom);
                 this.setEditorPosition({
-                    top: top - 110,
+                    top: top - 140,
                     left,
                 });
+                this.highLightId = id;
             }
+        },
+        async handleSubmitNote(text) {
+            // 保存备注文本
+            if (text || this.highLightId) {
+                const data = this.$storage.local.get(this.highLightId);
+                await this.$storage.local.set({
+                    [this.highLightId]: {
+                        ...data,
+                        note: text,
+                    }
+                });
+            }
+            this.handleCancelNote();
+        },
+        handleCancelNote() {
+            // 取消备注
+            this.showEditor = false;
+            this.highLightId = null;
+            this.defaultNote = '';
+        },
+        async handleDelete(id) {
+            // 删除高亮的存储数据
+            await this.$storage.local.remove(id);
+            this.handleCancelNote();
         }
     },
     watch: {

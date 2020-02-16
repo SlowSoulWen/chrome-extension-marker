@@ -3,6 +3,7 @@ import Highlighter from 'web-highlighter';
 import App from './App.vue';
 import './index.less';
 import '../assets/iconfont';
+import { storage } from '@/utils';
 
 function initTipWarp() {
     const $div = document.createElement('div');
@@ -10,17 +11,24 @@ function initTipWarp() {
     document.body.appendChild($div);
 }
 
-initTipWarp();
+async function appInit() {
+    const store = await storage;
+    Vue.use({
+        install(Vue) {
+            Vue.prototype.$chrome = chrome; // eslint-disable-line
+            Vue.prototype.$highlighter = new Highlighter({
+                $root: window.document.body || window.document.documentElement,
+            });
+            Vue.prototype.$storage = store;
+        }
+    })
+    new Vue({
+        render: h => h(App),
+    }).$mount('#_marker_tip_warp')
+}
 
-Vue.use({
-    install(Vue) {
-        Vue.prototype.$chrome = chrome; // eslint-disable-line
-        Vue.prototype.$highlighter = new Highlighter({
-            $root: window.document.body || window.document.documentElement,
-        });
-    }
-})
+setTimeout(() => {
+    initTipWarp();
+    appInit();
+}, 1500);
 
-new Vue({
-    render: h => h(App),
-}).$mount('#_marker_tip_warp')

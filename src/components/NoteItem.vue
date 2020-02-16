@@ -1,6 +1,6 @@
 <template>
     <div class="note-item">
-        <button @click="handleNote()" class="note-btn">
+        <button @click.stop="handleNote()" class="note-btn">
             <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-bi"></use>
             </svg>
@@ -14,15 +14,23 @@ export default {
     props: {
         color: {
             type: Object,
+        },
+        id: {
+            type: String,
         }
     },
     methods: {
         handleNote() {
-            const { name } = this.color;
             const selection = window.getSelection();
-            if (selection.isCollapsed) {
+            if (!selection.isCollapsed) {
+                this.createNewHighlight(selection);
                 return;
+            } else if (this.id) {
+                this.$emit('edit', { id: this.id });
             }
+        },
+        createNewHighlight(selection) {
+            const { name } = this.color;
             this.$highlighter.setOption({
                 style: {
                     className: `highlight-style-${name}`
@@ -31,7 +39,8 @@ export default {
             const source = this.$highlighter.fromRange(selection.getRangeAt(0));
             window.getSelection().removeAllRanges();
             this.$emit('edit', source);
-        }
+        },
+
     }
 }
 </script>
