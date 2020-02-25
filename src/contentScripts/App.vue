@@ -1,22 +1,22 @@
 <template>
     <div id="_marker_app">
-            <transition name="slide-fade">
-                <div class="tip_warp" v-show="showTip" ref="tip">
-                    <Tip id="_marker_tip">
-                        <div class="item-warp">
-                            <HightLightItem v-if="!isEditMode" :color="currentColor" class="tip-item" />
-                            <NoteItem :color="currentColor" :id="this.highLightId" @edit="handleEdit" class="tip-item" />
-                            <DeleteItem v-if="isEditMode" class="tip-item" :id="this.highLightId" @delete="handleDelete" />
-                            <ColorSelectorItem v-if="!isEditMode" v-model="currentColor" :colors="colors" class="tip-item" />
-                        </div>
-                    </Tip>
-                </div>
-            </transition>
-            <transition name="slide-fade">
-                <div class="editor_warp" v-show="showEditor" ref="editor">
-                    <Editor :defaultNote="defaultNote" :id="this.highLightId" @note="handleSubmitNote" @cancel="handleCancelNote()" @delete="handleDelete" v-if="showEditor" />
-                </div>
-            </transition>
+        <transition name="slide-fade">
+            <div class="tip_warp" v-show="showTip" ref="tip">
+                <Tip id="_marker_tip">
+                    <div class="item-warp">
+                        <HightLightItem v-if="!isEditMode" :color="currentColor" class="tip-item" />
+                        <NoteItem :color="currentColor" :id="this.highLightId" @edit="handleEdit" class="tip-item" />
+                        <DeleteItem v-if="isEditMode" class="tip-item" :id="this.highLightId" @delete="handleDelete" />
+                        <ColorSelectorItem v-if="!isEditMode" v-model="currentColor" :colors="colors" class="tip-item" />
+                    </div>
+                </Tip>
+            </div>
+        </transition>
+        <transition name="slide-fade">
+            <div class="editor_warp" v-show="showEditor" ref="editor">
+                <Editor :defaultNote="defaultNote" :id="this.highLightId" @note="handleSubmitNote" @cancel="handleCancelNote()" @delete="handleDelete" v-if="showEditor" />
+            </div>
+        </transition>
     </div>
 </template>
 

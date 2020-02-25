@@ -6,9 +6,10 @@
     {
       "all_frames": false,
       "js": [
-        "./js/chunk-common.js",
-        "./js/chunk-vendors.js",
         "./contentScripts.js"
+      ],
+      "css": [
+        "./css/contentScripts.css"
       ],
       "matches": [
         "http://*/*",
@@ -42,8 +43,6 @@
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background": {
     "scripts": [
-      "./js/chunk-common.js",
-      "./js/chunk-vendors.js",
       "./background.js"
     ]
   },
