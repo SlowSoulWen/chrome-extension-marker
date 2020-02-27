@@ -1,8 +1,6 @@
 <template>
     <div class="delete-item" @click="handleDelete">
-        <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-lajitong"></use>
-        </svg>
+        <i class="icon">&#xe6b0;</i>
     </div>
 </template>
 

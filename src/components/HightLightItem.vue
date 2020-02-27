@@ -1,9 +1,10 @@
 <template>
     <div class="hight-light-item">
         <button class="hight-light-btn" @click="handleHightLight()">
-            <svg class="icon" aria-hidden="true">
+            <i class="icon">&#xe7a8;</i>
+            <!-- <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-hf_makebi_fill"></use>
-            </svg>
+            </svg> -->
         </button>
     </div>
 </template>

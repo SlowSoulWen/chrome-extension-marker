@@ -64,12 +64,23 @@ export default {
         this.initStyleSheet();
         this.initHighLightFromStroage();
         this.initHighLightEvent();
+        this.initShadowRoot();
     },
     methods: {
+        initShadowRoot() {
+            const dom = document.querySelector('#_marker_app');
+            this.$shadowRoot.appendChild(dom);
+        },
         initStyleSheet() {
+            const dom = document.querySelector('#_marker_app')
             this.colors.forEach(color => {
                 createStyleSheet(color);
             });
+            const style = document.createElement('link');
+            style.rel = 'stylesheet';
+            style.type = 'text/css';
+            style.href = this.$chrome.extension.getURL('/css/contentScripts.css');
+            dom.appendChild(style);
         },
         initHighLightFromStroage() {
             const allHighLights = this.$storage.local.get();
@@ -220,33 +231,31 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-    #_marker_app {
-        .tip_warp,
-        .editor_warp {
-            z-index: 9999;
-            position: absolute;
-        }
-        .item-warp {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+<style lang="less">
+    .tip_warp,
+    .editor_warp {
+        z-index: 9999;
+        position: absolute;
+    }
+    .item-warp {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-            .tip-item {
-                &:not(:first-child) {
-                    margin-left: 15px;
-                }
+        .tip-item {
+            &:not(:first-child) {
+                margin-left: 15px;
             }
         }
-        .slide-fade-enter-active {
-            transition: all .2s ease;
-        }
-        .slide-fade-leave-active {
-            transition: all .15s ease-in;
-        }
-        .slide-fade-enter, .slide-fade-leave-to {
-            transform: translateY(10px);
-            opacity: 0;
-        }
+    }
+    .slide-fade-enter-active {
+        transition: all .2s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .15s ease-in;
+    }
+    .slide-fade-enter, .slide-fade-leave-to {
+        transform: translateY(10px);
+        opacity: 0;
     }
 </style>

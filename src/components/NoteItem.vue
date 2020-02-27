@@ -1,9 +1,10 @@
 <template>
     <div class="note-item">
         <button @click.stop="handleNote()" class="note-btn">
-            <svg class="icon" aria-hidden="true">
+            <i class="icon">&#xe63a;</i>
+            <!-- <svg class="icon" aria-hidden="true">
                 <use xlink:href="#icon-bi"></use>
-            </svg>
+            </svg> -->
         </button>
     </div>
 </template>

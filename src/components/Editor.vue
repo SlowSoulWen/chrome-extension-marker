@@ -1,15 +1,9 @@
 <template>
     <div @click.stop="handleEditorContentClick" class="highlight-editor">
         <div class="editor-options-warp">
-            <svg @click.stop="handleSubmit" class="icon" aria-hidden="true">
-                <use xlink:href="#icon-quxiaobixiu"></use>
-            </svg>
-            <svg @click.stop="handleCancel" class="icon" aria-hidden="true">
-                <use xlink:href="#icon-quxiao"></use>
-            </svg>
-            <svg @click.stop="handleDelete" class="icon" aria-hidden="true">
-                <use xlink:href="#icon-lajitong-copy"></use>
-            </svg>
+            <i @click="handleSubmit" class="icon">&#xe610;</i>
+            <i @click="handleCancel" class="icon">&#xe63e;</i>
+            <i @click="handleDelete" class="icon">&#xe601;</i>
         </div>
         <textarea v-model="noteTxt" class="txt-content" name="editor" id="editor"></textarea>
     </div>

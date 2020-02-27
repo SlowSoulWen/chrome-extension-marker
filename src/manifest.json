@@ -47,5 +47,6 @@
     ]
   },
   "description": "a chrome extension",
-  "name": "chrome-extension-marker"
+  "name": "chrome-extension-marker",
+  "web_accessible_resources": ["/css/contentScripts.css"]
 }

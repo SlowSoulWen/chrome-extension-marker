@@ -1,0 +1,72 @@
+{
+  "id": "1633976",
+  "name": "chrome-extension-marker",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6179929",
+      "name": "取消",
+      "font_class": "quxiao",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "847381",
+      "name": "垃圾桶",
+      "font_class": "lajitong-copy",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "8060951",
+      "name": "取消必修",
+      "font_class": "quxiaobixiu",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "1946799",
+      "name": "垃圾桶",
+      "font_class": "lajitong",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "3506763",
+      "name": "hf_马克笔_fill",
+      "font_class": "hf_makebi_fill",
+      "unicode": "e7a8",
+      "unicode_decimal": 59304
+    },
+    {
+      "icon_id": "5795346",
+      "name": "笔",
+      "font_class": "bi",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "7823892",
+      "name": "标记",
+      "font_class": "biaoji",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "11020220",
+      "name": "笔记",
+      "font_class": "biji",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "12058311",
+      "name": "马克笔",
+      "font_class": "makebi",
+      "unicode": "e6f0",
+      "unicode_decimal": 59120
+    }
+  ]
+}

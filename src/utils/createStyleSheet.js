@@ -1,4 +1,4 @@
-export default (option) => {
+export default (option, dom) => {
     const  { color, activeColor, name } = option;
     const styleId = `hightlight-style-${name}`;
     let $style = document.getElementById(styleId);
@@ -16,7 +16,7 @@ export default (option) => {
         $style = document.createElement('style');
         $style.id = styleId;
         $style.appendChild($cssNode);
-        document.head.appendChild($style);
+        dom ? dom.appendChild($style) : document.head.appendChild($style);
     }
 
     return $style;
